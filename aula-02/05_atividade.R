@@ -44,7 +44,8 @@ acessos <- unlist(acessos_alunos)
 ## 3. Determine o tamanho do vetor da operação 2, imprimindo o resultado na Console
 ### # ###
 
-
+acessos_maiores <- which(acessos > acessos_alunos$alu201830119)
+length(acessos_maiores)
 
 ### 5 ###
 ## Combine todas as etapas acima em uma única chamada, sem a criação dos vetores auxiliares
