@@ -138,6 +138,11 @@ resposta[2:4]
 #' 
 ## ------------------------------------------------------------------------
 named_list <- list(number=42, spelled="quarenta e dois")
+
+named_vector <- c(index1 = 1, index2 = 10)
+
+named_vector[1:2]
+
 named_list$number
 named_list$spelled
 

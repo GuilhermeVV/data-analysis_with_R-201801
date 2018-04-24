@@ -31,7 +31,7 @@ length(acessos_alunos)
 ## Dica 2: Vimos exemplos disto nos materiais dos tipos numéricos e das estruturas de dados.
 ### # ###
 
-paste(paste(paste(paste('O aluno', 'alu201830119'), 'realizou'), acessos_alunos$alu201830119), 'acessos.')
+paste('O aluno alu201830119 realizou', acessos_alunos$alu201830119, 'acessos.')
 
 ### 4 ###
 ## A operação abaixo cria um vetor com todas as quantidades de acessos por aluno.
@@ -44,14 +44,15 @@ acessos <- unlist(acessos_alunos)
 ## 3. Determine o tamanho do vetor da operação 2, imprimindo o resultado na Console
 ### # ###
 
-acessos_maiores <- which(acessos > acessos_alunos$alu201830119)
-length(acessos_maiores)
+maiores_acessos_verif <- acessos > acessos_alunos$alu201830119
+maiores_acessos <- which(maiores_acessos_verif)
+length(maiores_acessos)
 
 ### 5 ###
 ## Combine todas as etapas acima em uma única chamada, sem a criação dos vetores auxiliares
 ### # ###
 
-
+length(which(acessos > acessos_alunos$alu201830119))
 
 ### 6 ###
 ## Agora determine quantos colegas fizeram menos acessos que você. 
@@ -60,7 +61,7 @@ length(acessos_maiores)
 ## Dica: Lembre que falamos sobre como o R faz conversões implícitas entre o tipo lógico e tipos numéricos
 ### # ###
 
-
+sum(acessos < acessos_alunos$alu201830119)
 
 ### 7 ###
 ## Supondo que eu quero atribuir uma nota de participação baseada na quantidade de acessos, com a seguinte definição:
@@ -73,7 +74,10 @@ length(acessos_maiores)
 ## OBSERVAÇÃO :: Não avaliarei participação na forma do enunciado deste exercício. 
 ### # ###
 
-
+notas <- acessos
+notas[which(acessos == 0)] <- NA
+notas[which(acessos >= 1 & acessos < 10)] <- 1
+notas[which(acessos > 10)] <- 2
 
 ### 8 ###
 ## Visualização da quantidade de alunos com cada nota de participação. Esta não é uma atividade, apenas uma ilustração de como
