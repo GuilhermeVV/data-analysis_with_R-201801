@@ -27,6 +27,16 @@ c(0, 1, 1, 2, 3, 5)
 # A atribuição é na direção da seta =)
 c(0, 1, 1, 2, 3, 5) -> init_fibonacci
 
+init_fibonacci + 1
+
+c(0, 1, 1, 2, 3, 5) + c(1, 1, 1, 1, 1, 1)
+
+init_fibonacci + c(0, 1)
+
+init_fibonacci + c(0, 1, 3, 4)
+
+init_fibonacci + c(0, 1, 3, 4, 0, 1)
+
 #' 
 #' Atomic vectors são estruturas planas, não permitindo que um vetor seja composto de outros vetores. O exemplo abaixo demonstra que a tentativa de aninhar vetores resulta em um vetor plano idêntico ao vetor criado no exemplo anterior.
 #' 
@@ -46,7 +56,9 @@ answer <- 42
 # Exemplos de testes condicionais sobre os atributos de um vetor atômico numérico de tamanho 1
 if(is.atomic(answer)) print("É atômico.")
 if(is.numeric(answer)) print("É numérico")
-if(length(answer) == 1) print("Tamanho 1") 
+if(length(answer) == 1) print("Tamanho 1")
+
+length(init_fibonacci)
 
 #' 
 #' Os elementos de um vetor podem ser acessados através do índice, sempre lembrando que vetores em R são indexados a partir de 1.
@@ -60,18 +72,26 @@ seq_10
 # Quem é O Quinto Elemento deste vetor?
 seq_10[5]
 
+1:10
+
+seq(from=1, to=10, by=0.5)
+
 # Alguém arrisca dizer qual o resultado desta soma?
 seq_10_from_2 <- seq_10 + 1
 
 # Quem são os elementos maiores que 6?
 seq_10_from_2 > 6
 which(seq_10_from_2 > 6) # Índices
+which(seq_10 > 6)
 
 # Exiba-os, por favor :: a indexação também pode ser feita através de vetores lógicos, retornando todas as posições indexadas por TRUE
 seq_10_from_2[seq_10_from_2 > 6]
 
 # Os 3 primeiros elementos, pela sua posição
 seq_10_from_2[1:3]
+
+v2 <- c(1, 11, 5, 14, 6, 8, 7)
+v2[v2 > 6]
 
 #' 
 #' O operador `:` e a função `seq` produzem o mesmo resultado quando a função `seq` é aplicada com os dois primeiros parâmetros informados. A função `seq` é mais flexível, conforme demonstrado no segundo exemplo de uso. Percebam que os parâmetros de uma função são nomeados e podem ser informados junto aos valores atribuídos na chamada da função. Esta é uma prática recomendada para clareza.
@@ -92,7 +112,7 @@ seq(from=0, to=5, by=.5)
 #' 2. A possibilidade de aninhar outras estruturas
 #' 
 ## ------------------------------------------------------------------------
-resposta <- list(7, '*', 6, '=', list(42), c("quarenta", "e", "dois"))
+resposta <- list(7, '*', 6, '=', list(42, list(2)), c("quarenta", "e", "dois"))
 
 # A função glimpse apresenta uma prévia do conteúdo da lista passada como parâmetro. A função `str` atende o mesmo propósito.
 dplyr::glimpse(resposta)
@@ -106,6 +126,7 @@ str(resposta)
 ## ------------------------------------------------------------------------
 length(resposta)
 resposta[[3]]
+resposta[3]
 
 #' 
 #' Tanto listas quanto vetores podem ser indexados por meio de um vetor de índices, cujo resultado é um outro vetor ou lista contendo os componentes das referidas posições:

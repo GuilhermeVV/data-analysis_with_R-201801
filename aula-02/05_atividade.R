@@ -12,7 +12,7 @@ load("aula-02/data/dados_exercicio.RData")
 ##         quero ver uma saída na Console.
 ### # ####
 
-
+str(acessos_alunos)
 
 ### 2 ###
 ## Quantos elementos a variável acessos_alunos possui? Utilize uma função do R que retorna o tamanho da variável.
@@ -20,7 +20,7 @@ load("aula-02/data/dados_exercicio.RData")
 ## Dica: Vimos um exemplo no mesmo material sobre estruturas de dados
 ### # ###
 
-
+length(acessos_alunos)
 
 ### 3 ###
 ## Utilizando o seu código de aluno da Uniritter como nome de um valor da lista, imprima uma linha informando quantos acessos
@@ -31,7 +31,7 @@ load("aula-02/data/dados_exercicio.RData")
 ## Dica 2: Vimos exemplos disto nos materiais dos tipos numéricos e das estruturas de dados.
 ### # ###
 
-
+paste(paste(paste(paste('O aluno', 'alu201830119'), 'realizou'), acessos_alunos$alu201830119), 'acessos.')
 
 ### 4 ###
 ## A operação abaixo cria um vetor com todas as quantidades de acessos por aluno.
