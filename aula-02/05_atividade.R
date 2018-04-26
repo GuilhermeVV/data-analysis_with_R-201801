@@ -76,15 +76,13 @@ sum(acessos < acessos_alunos$alu201830119)
 
 notas <- acessos
 notas[which(acessos == 0)] <- NA
-notas[which(acessos >= 1 & acessos < 10)] <- 1
+notas[which(acessos >= 1 & acessos <= 10)] <- 1
 notas[which(acessos > 10)] <- 2
 
 ### 8 ###
 ## Visualização da quantidade de alunos com cada nota de participação. Esta não é uma atividade, apenas uma ilustração de como
 ## criar uma tabela com esta contagem
 table(notas)
-
-
 
 ### 9 ###
 ## Abaixo, criei uma versão modificada da lista acessos_alunos, com a inclusão de um acesso convidado.
