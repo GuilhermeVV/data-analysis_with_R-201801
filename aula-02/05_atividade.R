@@ -95,32 +95,63 @@ acessos_alunos_e_guest$guest <- NA
 
 acessos_e_guest <- unlist(acessos_alunos_e_guest)
 
-acessos_e_guest
-
+#Passo 4
 maiores_acessos_verif_e_guest <- acessos_e_guest > acessos_alunos$alu201830119
-#maiores_acessos <- which(maiores_acessos_verif)
-#length(maiores_acessos)
+maiores_acessos_e_guest <- which(maiores_acessos_verif_e_guest)
+length(maiores_acessos_e_guest)
 
-#length(which(acessos > acessos_alunos$alu201830119))
+#Passo 5
+length(which(acessos_e_guest > acessos_alunos$alu201830119))
 
-#sum(acessos < acessos_alunos$alu201830119)
+#Passo 6
+sum(acessos_e_guest < acessos_alunos$alu201830119)
 
-#notas <- acessos
-#notas[which(acessos == 0)] <- NA
-#notas[which(acessos >= 1 & acessos <= 10)] <- 1
-#notas[which(acessos > 10)] <- 2
+#Passo 7
+notas_e_guest <- acessos_e_guest
+notas_e_guest[which(notas_e_guest == 0)] <- NA
+notas_e_guest[which(notas_e_guest >= 1 & notas_e_guest <= 10)] <- 1
+notas_e_guest[which(notas_e_guest > 10)] <- 2
+
+table(notas_e_guest)
 
 ### 10 ###
 ## Responda as seguintes perguntas:
 
-
 # 1. Houve modificação no número de alunos com mais e com menos acessos que você?
 
+  # Não afetou o resultado de número de alunos com mais acessos, mas afetou o número com menos acessos. 
+  # Dependendo do contexto em que o NA é utilizado, o resultado também muda.
+  # Os resultados não afetados são os em que existiu passagem de parâmetro em funções - como which e table, que o desconsideram no retorno.
+
 # 2. Como você conclui que o R trata comparações (operações relacionais) entre valores numéricos e NA?
+
+  # Quando o NA é utilizado em comparação relacional e/ou expressão aritmética, o resultado é mantido como tal.
 
 # 3. Qual o resultado do uso da função sum na presença de NA? O que você conclui sobre a operação de soma de todos os valores de
 #    um vetor na presença de NA?
 
+  # O resultado retornado na função de agregação com a presença de NA também é NA.
+  # O sum realiza uma expressão aritmética em cima de n valores de entrada, apresentando o mesmo comportamento visto no item acima.
+
 # 4. Execute o comando abaixo para ler a documentação da função sum e veja se há como modificar a chamada da função sum na presença
 #    de NAs. Teste os exemplos da página de help da função sum.
-help(sum)
+
+  # É permitido remover os NA da soma, conforme os exemplos abaixo.
+
+## Pass a vector to sum, and it will add the elements together.
+sum(1:5)
+
+## Pass several numbers to sum, and it also adds the elements.
+sum(1, 2, 3, 4, 5)
+
+## In fact, you can pass vectors into several arguments, and everything gets added.
+sum(1:2, 3:5)
+
+## If there are missing values, the sum is unknown, i.e., also missing, ....
+sum(1:5, NA)
+
+## ... unless  we exclude missing values explicitly:
+sum(1:5, NA, na.rm = TRUE)
+
+# Teste de Guest
+sum(acessos_e_guest < acessos_alunos$alu201830119, na.rm = TRUE)
