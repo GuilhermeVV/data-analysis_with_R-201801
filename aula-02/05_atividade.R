@@ -93,7 +93,22 @@ acessos_alunos_e_guest$guest <- NA
 ## Repita as atividades 4, 5, 6, e 7 utilizando o acessos_com_guest no lugar da lista acessos_alunos.
 ## Tome o devido cuidado de sempre criar variáveis com nomes diferentes das já utilizadas! 
 
+acessos_e_guest <- unlist(acessos_alunos_e_guest)
 
+acessos_e_guest
+
+maiores_acessos_verif_e_guest <- acessos_e_guest > acessos_alunos$alu201830119
+#maiores_acessos <- which(maiores_acessos_verif)
+#length(maiores_acessos)
+
+#length(which(acessos > acessos_alunos$alu201830119))
+
+#sum(acessos < acessos_alunos$alu201830119)
+
+#notas <- acessos
+#notas[which(acessos == 0)] <- NA
+#notas[which(acessos >= 1 & acessos <= 10)] <- 1
+#notas[which(acessos > 10)] <- 2
 
 ### 10 ###
 ## Responda as seguintes perguntas:
