@@ -139,16 +139,38 @@ subset_salarios %>%
 #' 
 #' Por fim, determine a média salarial por ano de ingresso.
 #' 
+
 ## ------------------------------------------------------------------------
 print("Atividade")
 ## Modificar o Dataset para criação de nova variável
 
 ## Determine o tempo médio de trabalho em anos, em nível nacional
 
+subset_salarios %>%
+  mutate(ano_ingresso = year(DATA_DIPLOMA_INGRESSO_SERVICOPUBLICO)) %>%
+  summarise(ano_ingresso_medio = mean(ano_ingresso)) %>%
+  mutate(tempo_medio = year(Sys.Date()) - ano_ingresso_medio) %>%
+  select(tempo_medio)
+
 ## Determine o tempo médio de trabalho em anos, por UF
+
+subset_salarios %>%
+  mutate(ano_ingresso = year(DATA_DIPLOMA_INGRESSO_SERVICOPUBLICO)) %>%
+  group_by(UF_EXERCICIO) %>%
+  summarise(ano_ingresso_medio = mean(ano_ingresso)) %>%
+  mutate(tempo_medio = year(Sys.Date()) - ano_ingresso_medio) %>%
+  ungroup() %>%
+  arrange(desc(tempo_medio)) %>%
+  select(UF_EXERCICIO, tempo_medio)
 
 ## Determine a média salarial por ano de ingresso
 
+subset_salarios %>%
+  mutate(ano_ingresso = year(DATA_DIPLOMA_INGRESSO_SERVICOPUBLICO)) %>%
+  group_by(ano_ingresso) %>%
+  summarise(salario_medio = mean(REMUNERACAO_REAIS)) %>%
+  ungroup() %>%
+  arrange(desc(salario_medio))
 
 #' >> FIM DA ATIVIDADE
 #' 
