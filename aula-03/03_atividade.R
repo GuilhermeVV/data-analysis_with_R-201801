@@ -14,6 +14,9 @@ salarios <- read_csv("aula-03/data/201802_dados_salarios_servidores.csv.gz")
 ## 
 ### # ####
 
+salarios %>%
+  mutate(REMUNERACAO_FINAL = REMUNERACAO_REAIS + (REMUNERACAO_DOLARES * 3.24)) %>%
+  filter(REMUNERACAO_FINAL >= 900) -> salarios
 
 ### 2 ####
 ## 
@@ -26,6 +29,14 @@ salarios %>% count(UF_EXERCICIO) %>% pull(UF_EXERCICIO) -> ufs # EXEMPLO
 ## 
 ### # ####
 
+salarios %>%
+  filter(ORGSUP_LOTACAO != ORGSUP_EXERCICIO) %>%
+  group_by(DESCRICAO_CARGO) %>%
+  summarize(qtdServidoresCargo = n()) %>%
+  ungroup() %>%
+  arrange(desc(qtdServidoresCargo)) %>%
+  head(5) %>%
+  pull(DESCRICAO_CARGO) -> cargos_diferente_lotacao
 
 ### 3 ####
 ## 
@@ -41,6 +52,9 @@ salarios %>% count(UF_EXERCICIO) %>% pull(UF_EXERCICIO) -> ufs # EXEMPLO
 ##    - o menor salário
 ##    - o maior salário
 ## Analise os valores por lotação dentro de um mesmo cargo e comente ao final do exercício se você considera alguma diferença significativa.
+
+# Para o caso de "Guarda de Endemias", se nota uma dispersão maior - desvio padrão mostra isso.
+
 ## 
 ## Dica 1: o operador %in% testa se valores de uma variável pertencem ao conjunto de valores de um vetor. Lembre que deve ser utilizada a variável cargos_diferente_lotacao
 salarios %>% filter(DESCRICAO_CARGO %in% c("MINISTRO DE PRIMEIRA CLASSE", "ANALISTA DE TEC DA INFORMACAO", "PESQUISADOR")) %>% count(DESCRICAO_CARGO) # EXEMPLO
@@ -49,3 +63,18 @@ salarios %>% filter(DESCRICAO_CARGO %in% c("MINISTRO DE PRIMEIRA CLASSE", "ANALI
 ## 
 ### # ####
 
+salarios %>%
+  filter(DESCRICAO_CARGO %in% cargos_diferente_lotacao) %>%
+  mutate(indicaOrgao = if_else(ORGSUP_LOTACAO == ORGSUP_EXERCICIO, "IGUAL", "DIFERENTE")) %>%
+  group_by(DESCRICAO_CARGO, indicaOrgao) %>%
+  summarize(
+    media = mean(REMUNERACAO_FINAL),
+    desvioPadrao = sd(REMUNERACAO_FINAL),
+    mediana = median(REMUNERACAO_FINAL),
+    desvioAbsolutoMediana = median(abs(REMUNERACAO_FINAL - median(REMUNERACAO_FINAL))),
+    menor = min(REMUNERACAO_FINAL),
+    maior = max(REMUNERACAO_FINAL),
+    total = n()
+  ) %>%
+  ungroup %>%
+  View()
