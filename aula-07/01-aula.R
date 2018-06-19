@@ -365,37 +365,45 @@ ggplot(br_height, aes(x=year, y=height, ymin=lo_95, ymax=hi_95)) +
 #'
 
 br_height %>%
-  mutate(age = year(Sys.Date()) - year) %>%
-  select(sex = Sex, year, age, height, lo_95, hi_95) %>%
-  mutate(height_mean = mean(height)) %>%
-  mutate(height_proportion = height / height_mean) -> br_height
-  # Todos estariam dentro do IC...
+  filter(Sex == 'Men' & year == 1990) %>%
+  select(height, lo_95, hi_95) %>%
+  mutate(height_ratio = 182 / height, heigh_in_ic = between(182, lo_95, hi_95))
 
 #'
 #' 2. Baixe o relatório do [LEVANTAMENTO DO PERFIL ANTROPOMÉTRICO DA POPULAÇÃO BRASILEIRA USUÁRIA DO TRANSPORTE AÉREO NACIONAL – PROJETO CONHECER](http://www2.anac.gov.br/arquivos/pdf/Relatorio_Final_Projeto_Conhecer.pdf) e obtenha a média e o desvio padrão da amostra deste relatório (página 23).
 #'
 
-br_height_mean = 173.1
-br_height_sd = 7.3
+media_anac_altura <- 173.1
+sd_anac_altura <- 7.3
+
+media_anac_idade <- 40
+sd_anac_idade <- 12
 
 #'
 #' 3. Considerando que o estudo da ANAC foi realizado entre os anos de 2004 e 2008, e que a média de idade é de 40 anos, com Desvio Padrão de idade de 12 anos, e assumindo como premissa que a altura da pessoa se mantem entre os 20 e os 60 anos, temos um intervalo de aproximadamente 1.65 desvios padrão da média. Utilizando a função `pnorm`, calcule os percentuais de 20 anos e 60 anos com a média (mean), e desvio padrão (sd) obtidos neste relatório. Utilize o parâmtro `lower.tail = FALSE` para 60 anos e `lower.tail = TRUE` para 20 anos. Quais são os valores obtidos? Conclua quanto representa, em percentual, os 1.65 desvios padrão.
 #'
 
-br_height %>%
-  filter(age == 20 | age == 60)
-  #...
+pnorm(mean = media_anac_idade, sd = sd_anac_idade, q = 60, lower.tail = FALSE)
+pnorm(mean = media_anac_idade, sd = sd_anac_idade, q = 20, lower.tail = TRUE)
 
 #'
 #' 4. Assumindo que a altura aos 18 anos equivale à altura dos 20 aos 60 anos, selecione do data frame br_height a altura média de todas as pessoas que tinham entre 20 e 60 anos entre os anos de 2004 e 2008. Calcule a média de altura de homens e de mulheres neste período. Realize todo este exercício utilizando o __dplyr__. Responda: Com base nas alturas médias obtidas, você acha que mulheres participaram deste estudo?
 #'
 
+menor_ano <- 2004 - 60
+maior_ano <- 2008 - 20
+
+br_height %>%
+  filter(between(year, menor_ano, maior_ano)) %>%
+  group_by(Sex) %>%
+  summarise(mean_height = mean(height)) %>%
+  ungroup()
 
 
 #' 5. A altura média dos homens calculada no exercício 4 está quantos desvios-padrão acima/abaixo da média anotada no exercício 2?
 #'
 
-
+(171 - media_anac_altura) / sd_anac_idade
 
 #'
 #' 6. Baixe os seguintes arquivos:
