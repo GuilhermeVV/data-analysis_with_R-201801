@@ -300,3 +300,13 @@ products %>%
 
 #22 # Teste se há diferença nas vendas por hora entre os dias 3 e 4 usando o teste de wilcoxon e utilizando a simulação da aula de testes
 
+insta_orders %>%
+    filter(order_dow %in% c(3, 4)) %>%
+    mutate(qty = 1) %>%
+    group_by(order_dow, order_hour_of_day) %>%
+    summarise(total = sum(qty)) -> insta_orders_wilcoxon
+
+wilcox.test(
+    total ~ order_dow,
+    data = insta_orders_wilcoxon
+    )
