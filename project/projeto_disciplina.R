@@ -1,3 +1,5 @@
+# Componentes: Guaracy Dias, Guilherme Vivian e Lucas Garmendia
+
 # Descrição dos dados: https://tech.instacart.com/3-million-instacart-orders-open-sourced-d40d29ead6f2
 # Estamos trabalhando com somente uma amostra do total de pedidos. O dataset abaixo não possui 3 milhões de pedidos ;)
 
@@ -12,7 +14,6 @@ library(ggcorrplot)
 departments <- read_csv("project/departments.csv")                   # Cadastro de Departamentos
 aisles <- read_csv("project/aisles.csv")                             # Cadastro de "Corredores"
 products <- read_csv("project/products.csv")                         # Cadastro de Produtos
-
 insta_orders <- read_csv( "project/orders_instacart.csv" )           # Amostra de pedidos de usuários
 insta_products <- read_csv( "project/order_products_instacart.csv" ) # Produtos que compõe os pedidos
 
@@ -230,26 +231,72 @@ df_all %>%
 #17 # O vetor abaixo lista todos os IDs de bananas maduras em seu estado natural.
     # Utilizando este vetor, identifique se existem pedidos com mais de um tipo de banana no mesmo pedido.
 
+bananas <- c(13176, 24852, 29259, 37067, 39276)
 
+#df_all %>% filter(product_id %in% bananas)
+
+# Não existiram bananas no df_all (atividade 6), utilizou-se, então, o vetor original.
+
+insta_products %>%
+    filter(product_id %in% bananas) %>%
+    group_by(order_id) %>%
+    summarise(qty = n()) %>%
+    ungroup() %>%
+    filter(qty > 1) %>%
+    pull(order_id) -> orders_bananas
 
 #18 # Se existirem, pedidos resultantes da atividade 17, conte quantas vezes cada tipo de banana aparece nestes pedidos com mais de um tipo de banana.
     # Após exibir os tipos de banana, crie um novo vetor de id de bananas contendo somente os 3 produtos de maior contagem de ocorrências
 
+insta_products %>%
+    filter(product_id %in% bananas & order_id %in% orders_bananas) %>%
+    distinct(order_id, product_id) %>%
+    group_by(product_id) %>%
+    summarise(qty = n()) %>%
+    arrange(desc(qty)) %>%
+    head(3) %>%
+    pull(product_id) -> bananas_top_3
 
+#19 # Com base no vetor criado na atividade 18, conte quantos pedidos de, em média, são feitos por hora em cada dia da semana.
 
-#19 # Com base no vetor criado na atividade 18, conte quantos pedidos de, em média, são feitos por hora em cada dia da semana. 
-
-
-
+products %>%
+    filter(product_id %in% bananas_top_3) %>%
+    inner_join(insta_products, by = "product_id") %>%
+    inner_join(insta_orders, by = "order_id") %>%
+    distinct(order_dow, order_hour_of_day, order_id) %>%
+    mutate(qty = 1) %>%
+    group_by(order_dow, order_hour_of_day) %>%
+    summarise(orders_mean = mean(sum(qty))) %>%
+    ungroup()
+    
 #20 # Faça um gráfico dos pedidos de banana da atividade 19. O gráfico deve ter o dia da semana no eixo X, a hora do dia no eixo Y, 
     # e pontos na intersecção dos eixos, onde o tamanho do ponto é determinado pela quantidade média de pedidos de banana 
     # nesta combinação de dia da semana com hora
 
-
+products %>%
+    filter(product_id %in% bananas_top_3) %>%
+    inner_join(insta_products, by = "product_id") %>%
+    inner_join(insta_orders, by = "order_id") %>%
+    distinct(order_dow, order_hour_of_day, order_id) %>%
+    ggplot(aes(x = order_dow, y = order_hour_of_day, color = ..n..)) +
+    geom_count()
 
 #21 # Faça um histograma da quantidade média calculada na atividade 19, facetado por dia da semana
 
-
+products %>%
+    filter(product_id %in% bananas_top_3) %>%
+    inner_join(insta_products, by = "product_id") %>%
+    inner_join(insta_orders, by = "order_id") %>%
+    distinct(order_dow, order_hour_of_day, order_id) %>%
+    mutate(qty = 1) %>%
+    group_by(order_dow, order_hour_of_day) %>%
+    summarise(orders_mean = mean(sum(qty))) %>%
+    ungroup() %>%
+    ggplot(aes(x = orders_mean)) +
+    scale_x_continuous(breaks = seq(from = 0, to = 850, by = 50)) +
+    scale_y_continuous(breaks = seq(from = 0, to = 20, by = 1)) +
+    geom_histogram(breaks = seq(from = 0, to = 850, by = 5)) +
+    facet_wrap(~order_dow, ncol = 2)
 
 #22 # Teste se há diferença nas vendas por hora entre os dias 3 e 4 usando o teste de wilcoxon e utilizando a simulação da aula de testes
 
